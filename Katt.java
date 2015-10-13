@@ -1,6 +1,6 @@
 class Katt
 {
-
+ 
 String navn;
 int alder;
 public Katt(String navn, int alder)
