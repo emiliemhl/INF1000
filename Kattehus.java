@@ -10,34 +10,52 @@ class Kattehus{
 	
 	public void lesInnKatterFraFil(String filnavn) throws Exception{
 		Scanner sc = new Scanner(new File(filnavn));
-		
-		do{
-			String temp = sc.nextLine();
-			boolean leserInnKatt = true;
-			boolean erBindestrek = false;
-			if(temp.equals("-") && leserInnKatt){
-				String navn = sc.nextLine();
-				String rase = sc.nextLine();
-				String farge = sc.nextLine();
-				Katt k = new Katt(navn, rase, farge);
-				
-				while (sc.hasNextLine() && !erBindestrek){
-					k.leggTilPersonlighetstrekk(sc.nextLine());
-					if (sc.nextLine().equals("-") && sc.hasNextLine()){
-						erBindestrek = true;
-					}
-					else{
-						erBindestrek = false;
-					}
+
+		sc.nextLine();
+
+		String denneKatt = sc.nextLine();
+		String rase = sc.nextLine();
+		String farge = sc.nextLine();
+		String linje = sc.nextLine();
+		ArrayList<String> trekk = new ArrayList<String>();
+
+		while(sc.hasNextLine()) {
+			if(linje.equals("-")) {
+				Katt k = new Katt(denneKatt, rase, farge);
+				katteliste.put(denneKatt, k);
+
+				for(String s : trekk) {
+					k.leggTilPersonlighetstrekk(s);
 				}
-				
+
+				denneKatt = sc.nextLine();
+				rase = sc.nextLine();
+				farge = sc.nextLine();
+				trekk = new ArrayList<String>();
+				linje = sc.nextLine();
+				continue; // Ikke bruk dette på eksamen da stryker dere (neida)
+						  // hopper deg opp til begynnelsen av while-løkka
 			}
-		}while (sc.hasNextLine());
+			trekk.add(linje);
+			linje = sc.nextLine();
+		}
+		for(Katt k : katteliste.values()) {
+			System.out.println(k);
+		}
+
+		Katt k = new Katt(denneKatt, rase, farge);
+		katteliste.put(denneKatt, k);
+
+		for(String s : trekk) {
+			k.leggTilPersonlighetstrekk(s);
+		}
+
 	}
+
+
 	
 	public void skrivKatterTilFil(String filnavn) throws Exception{
 		PrintWriter pw = new PrintWriter(filnavn);
-		pw.println("Kattefil");
 		for (String s : katteliste.keySet()){
 			pw.println("-");
 			pw.println(katteliste.get(s).toString());
@@ -45,7 +63,7 @@ class Kattehus{
 			pw.println(katteliste.get(s).getFarge());
 			for (String t : katteliste.get(s).getPersonlighet().keySet()){
 				pw.println(t);
-			}	
+			}
 		}
 		pw.close();
 	}
@@ -56,19 +74,5 @@ class Kattehus{
 		k.leggTilPersonlighetstrekk(p);
 		katteliste.put(navn, k);
 		
-	}		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	}					
 }
